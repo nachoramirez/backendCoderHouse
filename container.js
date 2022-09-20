@@ -1,4 +1,4 @@
-import fs from 'fs'
+const fs = require('fs')
 
 class Container {
   constructor(file) {
@@ -32,9 +32,32 @@ class Container {
     try {
       await fs.promises.writeFile(this.file, JSON.stringify(allObjects))
       console.log('added succesfully')
-      return result
+      return newObject
     } catch (e) {
       console.error(e)
+      throw e
+    }
+  }
+
+  async reWrite(objectId, newObject) {
+    const allObjects = await this.getAll()
+
+    const newObjects = allObjects.map((item) =>
+      item.id === objectId
+        ? {
+            ...newObject,
+            id: objectId,
+          }
+        : item
+    )
+
+    try {
+      await fs.promises.writeFile(this.file, JSON.stringify(newObjects))
+      console.log('added succesfully')
+      return newObjects
+    } catch (e) {
+      console.error(e)
+      throw e
     }
   }
 
@@ -43,19 +66,27 @@ class Container {
 
     const result = content.filter((item) => item.id === id)
     console.log(result.length > 0 ? result : 'not found')
-    return result
+    if (result.length > 0) {
+      return result
+    } else {
+      throw 'not found'
+    }
   }
 
   async deleteById(id) {
     const content = await this.getAll()
     const result = content.filter((item) => item.id !== id)
 
+    if (result.length == content.length) {
+      throw 'not found'
+    }
+
     try {
       await fs.promises.writeFile(this.file, JSON.stringify(result))
       console.log('deleted succefully')
       return result
     } catch (e) {
-      console.error('error', e)
+      throw 'not found'
     }
   }
 
@@ -66,8 +97,9 @@ class Container {
       return result
     } catch (e) {
       console.error('error', e)
+      throw e
     }
   }
 }
 
-export default Container
+module.exports = Container
