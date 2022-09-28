@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add product</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <section>
+      <h2>Add product</h2>
+      <form action="/" method="POST">
+        <div>
+          <label>Product name</label>
+          <input required type="text" placeholder="Name" name="title" />
+        </div>
+        <div>
+          <label>Price</label>
+          <input required type="number" placeholder="Price" name="price" />
+        </div>
+        <div>
+          <label>Photo URL</label>
+          <input
+            required
+            type="text"
+            placeholder="Photo URL"
+            name="thumpnail"
+          />
+        </div>
+        <div>
+          <button type="submit">submit</button>
+          <button>
+            <a href="/"> List of product</a>
+          </button>
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
