@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "cross-env ./node_modules/nodemon/bin/nodemon.js --exec 'node -r dotenv/config' ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "express-useragent": "^1.0.15",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "nodemon": "^2.0.20"
+  }
+}

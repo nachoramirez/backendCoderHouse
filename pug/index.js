@@ -4,6 +4,7 @@ const path = require('path')
 
 const products = require('./routers/products')
 
+
 const app = express()
 
 const PORT = process.env.NODE_PORT
@@ -11,11 +12,14 @@ const ENV = process.env.NODE_ENV
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/static', express.static(path.join(__dirname, 'public')))
+
+app.set('view engine', 'pug')
+app.set('views', './views')
+app.use('/static', express.static(path.join(__dirname, '/public')))
 
 app.use(useragent.express())
 
-app.use('/api/products', products)
+app.use('/', products)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

@@ -8,12 +8,18 @@ const products = new Container('/products.txt')
 
 router.get('/', async (req, res) => {
   const allProducts = await products.getAll()
-  res.send(allProducts)
+  allProducts.length > 0 ? 
+  res.render('index.pug', {
+    products: allProducts,
+    areProducts: true,
+  }) : res.render('index', {
+    areProducts: false,
+  })
 })
 
 router.post('/', async (req, res) => {
   const newProduct = await products.save(req.body)
-  res.sendStatus(201)
+  res.redirect('/')
 })
 
 router.get('/:id', async (req, res, next) => {

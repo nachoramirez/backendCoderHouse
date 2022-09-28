@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head'); %>
+  </head>
+  <body>
+    <% if (areProducts) { %>
+    <section>
+      <h2>List of products</h2>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Photo</th>
+        </tr>
+        <% products.forEach(product => { %>
+        <tr>
+          <td class="product"><%= product.title %></td>
+          <td class="product"><%= product.price %> </td>
+          <td class="product">
+            <img src= <%= product.thumpnail %> alt="product photo" />
+          </td>
+        </tr>
+       <% }) %>
+      </table>
+      <button>
+        <a href="/static/addProduct.html">Add product</a>
+      </button>
+    </section>
+    <% } %>
+    <% if (!areProducts) { %>
+    <section>
+      <h2>List of products</h2>
+      <div class="warning">
+        <h3>Not found products</h3>
+      </div>
+      <button type="button">
+        <a href="/static/addProduct.html">Add product</a>
+      </button>
+    </section>
+
+    <% } %>
+  </body>
+</html>
