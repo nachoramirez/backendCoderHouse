@@ -3,18 +3,19 @@ body {
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   place-content: center;
   display: grid;
+  min-height: 100vh;
+  margin-top: 60px;
 }
 
 section {
-  width: 30vw;
+  width: 40vw;
   background-color: rgb(224, 224, 224);
   padding: 20px;
-  min-height: 80vh;
+  /* min-height: 80vh; */
 }
 
 form {
   width: 100%;
-  min-height: 30vh;
   place-items: center;
   display: flex;
   flex-direction: column;
@@ -42,6 +43,7 @@ a:visited {
 }
 input {
   height: 30px;
+  margin: 5px;
 }
 
 h2 {

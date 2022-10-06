@@ -1,0 +1,73 @@
+<script type='text/x-handlebars-template' id="template">
+<section>
+  <h2>Add product</h2>
+  <form action='/' method='POST'>
+    <div>
+      <label>Product name</label>
+      <input
+        required
+        type='text'
+        id='product'
+        placeholder='Name'
+        name='title'
+      />
+    </div>
+    <div>
+      <label>Price</label>
+      <input
+        required
+        type='number'
+        id='price'
+        placeholder='Price'
+        name='price'
+      />
+    </div>
+    <div>
+      <label>Photo URL</label>
+      <input
+        required
+        type='text'
+        id='image'
+        placeholder='Photo URL'
+        name='thumpnail'
+      />
+    </div>
+    <div>
+      <button type='submit'>submit</button>
+    </div>
+  </form>
+</section>
+
+{{#if areProducts}}
+  <section>
+    <h2> List of products</h2>
+    <table id='list-of-products'>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Photo</th>
+      </tr>
+      {{#each products}}
+        <tr>
+          <td class='product'>{{this.title}}</td>
+          <td class='product'>{{this.price}}</td>
+          <td class='product'>
+            <img src='{{this.thumpnail}}' alt='product photo' />
+          </td>
+        </tr>
+      {{/each}}
+    </table>
+  </section>
+{{/if}}
+{{#unless areProducts}}
+  <section>
+    <h2> List of products</h2>
+    <div class='warning'>
+      <h3>Not found products</h3>
+    </div>
+  </section>
+
+{{/unless}}
+
+<section id="output"></section>
+</script>
