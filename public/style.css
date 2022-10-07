@@ -47,7 +47,6 @@ input {
 }
 
 h2 {
-  font-size: 3rem;
   color: blue;
   width: 400px;
 }
@@ -83,4 +82,33 @@ td {
 
 img {
   width: 90px;
+}
+
+.mensaje-center {
+  margin-top: 40px;
+}
+
+.chat-box {
+  width: 100%;
+  display: flex;
+  align-items: start;
+}
+
+.chat-box input {
+  width: 80%;
+  padding: 5px;
+}
+
+
+
+.chat-box-text {
+  min-height: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.chat-box-text div{
+  width: 100%;
 }

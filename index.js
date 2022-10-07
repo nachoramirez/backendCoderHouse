@@ -4,8 +4,10 @@ const path = require('path')
 const { Server: IOServer } = require('socket.io')
 const { Server: HttpServer } = require('http')
 
-const products = require('./routers/products')
-const { engine } = require('express-handlebars')
+const Container = require('./container')
+
+const products = new Container('/products.txt')
+const mensajes = new Container('/mensajes.txt')
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -16,34 +18,39 @@ const ENV = process.env.NODE_ENV
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-// app.engine(
-//   'handlebars',
-//   engine({
-//     extname: '.hbs',
-//     defaultLayout: 'index.handlebars',
-//     layoutDir: '/views/layouts',
-//   })
-// )
 app.use(useragent.express())
-
-// app.set('view engine', 'handlebars')
-// app.set('views', './views')
 app.use('/static', express.static(path.join(__dirname, '/public')))
 
-app.get('/', (req, res) => {
+let allProducts = []
+let allMensajes = []
+
+app.get('/', async (req, res) => {
   res.sendFile('index.html', { root: __dirname })
 })
 
-let mensajes = [{ author: 'rodolfo', mensaje: 'hola gente' }]
-
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log('usuario conectado')
-  socket.emit('mensajes', mensajes)
 
-  socket.on('mensaje', (data) => {
-    mensajes.push(data)
-    console.log(mensajes)
-    io.sockets.emit('mensajes', mensajes)
+  allProducts = await products.getAll()
+  allMensajes = await mensajes.getAll()
+
+  socket.emit('products', allProducts)
+  socket.emit('mensajes', allMensajes)
+
+  socket.on('new-product', async (data) => {
+    allProducts.push(data)
+    await products.save(data)
+
+    console.log(data)
+    io.sockets.emit('products', allProducts)
+  })
+
+  socket.on('new-mensaje', async (data) => {
+    allMensajes.push(data)
+
+    await mensajes.save(data)
+    console.log(data)
+    io.sockets.emit('mensajes', allMensajes)
   })
 })
 
@@ -58,7 +65,5 @@ app.use((err, req, res, next) => {
 const server = httpServer.listen(PORT, () => {
   console.log(`listen on port ${PORT}`)
 })
-
-
 
 server.on('error', (error) => console.log(`Error en servidor ${error}`))

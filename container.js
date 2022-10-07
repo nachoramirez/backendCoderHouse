@@ -94,7 +94,6 @@ class Container {
     try {
       await fs.promises.writeFile(this.file, JSON.stringify([]))
       console.log('deleted succefully')
-      return result
     } catch (e) {
       console.error('error', e)
       throw e

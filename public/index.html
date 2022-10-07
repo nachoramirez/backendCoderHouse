@@ -7,13 +7,92 @@
     <title>Products</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/index.js"></script>
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
   </head>
   <body>
-    <form id="form" onsubmit="return onSubmit()">
-      <input placeholder="nombre" id="name" required />
-      <input placeholder="mensaje" id="text" required />
-      <button type="submit" onclick="">Enviar</button>
-    </form>
-    <div id="mensajes"></div>
+    <section>
+      <h2>Add product</h2>
+      <form onsubmit="event.preventDefault()">
+        <div>
+          <label>Product name</label>
+          <input
+            required
+            type="text"
+            id="product"
+            placeholder="Name"
+            name="title"
+          />
+        </div>
+        <div>
+          <label>Price</label>
+          <input
+            required
+            type="number"
+            id="price"
+            placeholder="Price"
+            name="price"
+          />
+        </div>
+        <div>
+          <label>Photo URL</label>
+          <input
+            required
+            type="text"
+            id="image"
+            placeholder="Photo URL"
+            name="thumpnail"
+          />
+        </div>
+        <div>
+          <button type="button" onclick="onSubmit()">submit</button>
+        </div>
+      </form>
+    </section>
+    <script type="text/x-handlebars-template" id="template">
+      {{#if areProducts}}
+        <section>
+          <h2> List of products</h2>
+          <table id='list-of-products'>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Photo</th>
+            </tr>
+            {{#each products}}
+              <tr>
+                <td class='product'>{{this.title}}</td>
+                <td class='product'>{{this.price}}</td>
+                <td class='product'>
+                  <img src='{{this.thumpnail}}' alt='product photo' />
+                </td>
+              </tr>
+            {{/each}}
+          </table>
+        </section>
+      {{/if}}
+      {{#unless areProducts}}
+        <section>
+          <h2> List of products</h2>
+          <div class='warning'>
+            <h3>Not found products</h3>
+          </div>
+        </section>
+
+      {{/unless}}
+    </script>
+    <article id="output"></article>
+    <section class="mensaje-center">
+      <h2>Centro de mensajes</h2>
+      <form class="chat-box" id="form" onsubmit="event.preventDefault()">
+        <input placeholder="mail" id="mail" required />
+        <div class="chat-box-text" id="mensajes">
+        </div>
+        <div>
+          <input placeholder="mensaje" id="text" required />
+          <button type="button" onclick="onChatSubmit()">Enviar</button>
+        </div>
+      </form>
+    </section>
   </body>
 </html>
