@@ -3,6 +3,8 @@ const useragent = require('express-useragent')
 const path = require('path')
 
 const products = require('./routers/products')
+const cart = require('./routers/cart')
+const admin = require('./routers/admin')
 
 const app = express()
 
@@ -15,7 +17,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use(useragent.express())
 
-app.use('/api/products', products)
+app.use(`/api/products`, products)
+app.use('/api/cart', cart)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

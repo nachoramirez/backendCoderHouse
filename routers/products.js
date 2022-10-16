@@ -11,11 +11,6 @@ router.get('/', async (req, res) => {
   res.send(allProducts)
 })
 
-router.post('/', async (req, res) => {
-  const newProduct = await products.save(req.body)
-  res.sendStatus(201)
-})
-
 router.get('/:id', async (req, res, next) => {
   const id = parseInt(req.params.id)
   try {
@@ -26,19 +21,39 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  const admin = req.query.admin
+  if (admin === 'true') {
+    const newProduct = await products.save(req.body)
+    res.sendStatus(201)
+  } else {
+    res.sendStatus(401)
+  }
+})
+
 router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id)
-  const newProduct = await products.reWrite(id, req.body)
-  res.sendStatus(204)
+  const admin = req.query.admin
+  if (admin === 'true') {
+    const newProduct = await products.reWrite(id, req.body)
+    res.sendStatus(204)
+  } else {
+    res.sendStatus(401)
+  }
 })
 
 router.delete('/:id', async (req, res, next) => {
   const id = parseInt(req.params.id)
-  try {
-    await products.deleteById(id)
-    res.sendStatus(204)
-  } catch (e) {
-    next(e)
+  const admin = req.query.admin
+  if (admin === 'true') {
+    try {
+      await products.deleteById(id)
+      res.sendStatus(204)
+    } catch (e) {
+      next(e)
+    }
+  } else {
+    res.sendStatus(401)
   }
 })
 
