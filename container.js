@@ -18,13 +18,15 @@ class Container {
 
   async createCart() {
     const allObjects = await this.getAll()
-    const timeStamp = new Date.now()
+    const date = new Date(Date.now())
+    const timeStamp = date.toLocaleString()
 
     const lastItem =
       allObjects.length > 0 ? allObjects[allObjects.length - 1].id : 0
     const newObject = {
       id: lastItem + 1,
-      timestamp: timeStamp
+      timestamp: timeStamp,
+      products: [],
     }
 
     allObjects.push(newObject)
@@ -41,14 +43,14 @@ class Container {
 
   async save(object) {
     const allObjects = await this.getAll()
-    const timeStamp = new Date.now()
+    const timeStamp = Date.now()
 
     const lastItem =
       allObjects.length > 0 ? allObjects[allObjects.length - 1].id : 0
     const newObject = {
       ...object,
       id: lastItem + 1,
-      timestamp: timeStamp
+      timestamp: timeStamp,
     }
 
     allObjects.push(newObject)
@@ -69,8 +71,8 @@ class Container {
     const newObjects = allObjects.map((item) =>
       item.id === cartId
         ? {
-            id: cartId,
-            products: [...object],
+            ...item,
+            products: [...item.products,object],
           }
         : item
     )

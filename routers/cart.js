@@ -6,16 +6,16 @@ const router = Router(Router)
 
 const cart = new Container('/cart.txt')
 
-// router.get('/', async (req, res) => {
-//   const allcart = await cart.getAll()
-//   res.send(allcart)
-// })
+router.get('/', async (req, res) => {
+  const allcart = await cart.getAll()
+  res.send(allcart)
+})
 
 router.get('/:id/products', async (req, res, next) => {
   const id = parseInt(req.params.id)
   try {
     const allcart = await cart.getById(id)
-    res.send(allcart)
+    res.send(allcart[0])
   } catch (e) {
     next(e)
   }
@@ -23,6 +23,7 @@ router.get('/:id/products', async (req, res, next) => {
 
 router.post('/', async (req, res) => {
   const newCart = await cart.createCart()
+  console.log(newCart)
   res.send(newCart)
 })
 
