@@ -4,13 +4,22 @@ const path = require('path')
 
 const products = require('./routers/products')
 const cart = require('./routers/cart')
-const admin = require('./routers/admin')
 
 const app = express()
 
 const PORT = process.env.NODE_PORT
 const ENV = process.env.NODE_ENV
+const FRONTEND_URI = process.env.FRONTEND_URI
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Methods', 'DELETE,PUT,POST,GET')
+  res.header('Access-Control-Allow-Origin', FRONTEND_URI)
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/static', express.static(path.join(__dirname, 'public')))
