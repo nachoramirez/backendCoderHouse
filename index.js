@@ -6,8 +6,8 @@ const { Server: HttpServer } = require('http')
 
 const Container = require('./container')
 
-const products = new Container('/products.txt')
-const mensajes = new Container('/mensajes.txt')
+const products = new Container('/products.txt', 'products', 'MariaDB')
+const mensajes = new Container('/mensajes.txt', 'mensajes', 'SQlite3')
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -40,21 +40,16 @@ io.on('connection', async (socket) => {
   socket.on('new-product', async (data) => {
     allProducts.push(data)
     await products.save(data)
-
-    console.log(data)
     io.sockets.emit('products', allProducts)
   })
 
   socket.on('new-mensaje', async (data) => {
     allMensajes.push(data)
-
     await mensajes.save(data)
-    console.log(data)
     io.sockets.emit('mensajes', allMensajes)
   })
 })
 
-// app.use('/', products)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

@@ -1,16 +1,33 @@
 const fs = require('fs')
 
 class Container {
-  constructor(file) {
+  constructor(file, name, db) {
     this.file = file
+    this.name = name
+    const { options } = require(`./options/${db}`)
+    this.knex = require('knex')(options)
+    this.init()
+  }
+
+  async init() {
+    this.knex.schema.hasTable(this.name)
+      .then(() => console.log('allready exist'))
+      .catch(() => {
+        this.knex.schema
+          .createTable(this.name, (table) => {
+            table.string('mail')
+            table.string('mensaje')
+            table.string('date')
+          })
+          .then(() => console.log('created'))
+      })
   }
 
   async getAll() {
     try {
-      const content = await fs.promises.readFile(this.file, 'utf-8')
-      const result = [...JSON.parse(content)]
-      console.log(result)
-      return result
+      const rows = await this.knex.from(this.name).select('*')
+      const products = Object.values(JSON.parse(JSON.stringify(rows)))
+      return products
     } catch (e) {
       console.error('error', e)
       return []
@@ -18,23 +35,11 @@ class Container {
   }
 
   async save(object) {
-    const allObjects = await this.getAll()
-
-    const lastItem =
-      allObjects.length > 0 ? allObjects[allObjects.length - 1].id : 0
-    const newObject = {
-      ...object,
-      id: lastItem + 1,
-    }
-
-    allObjects.push(newObject)
-
     try {
-      await fs.promises.writeFile(this.file, JSON.stringify(allObjects))
+      await this.knex(this.name).insert(object)
       console.log('added succesfully')
-      return newObject
     } catch (e) {
-      console.error(e)
+      console.log(e)
       throw e
     }
   }

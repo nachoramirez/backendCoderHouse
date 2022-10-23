@@ -22,7 +22,7 @@ function onSubmit() {
   const product = {
     title: title,
     price: price,
-    thumpnail: thumpnail,
+    photo: thumpnail,
   }
   socket.emit('new-product', product)
   document.getElementById('product').value = ''
