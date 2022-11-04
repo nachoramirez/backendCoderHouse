@@ -12,11 +12,6 @@ router.get('/', async (req, res) => {
   res.send(allProducts)
 })
 
-router.post('/', async (req, res) => {
-  const newProduct = await mongo.save(req.body)
-  res.sendStatus(201)
-})
-
 router.get('/:id', async (req, res, next) => {
   const id = req.params.id
   try {
@@ -30,7 +25,7 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res) => {
   const admin = req.query.admin
   if (admin === 'true') {
-    const newProduct = await products.save(req.body)
+    const newProduct = await mongo.save(req.body)
     res.sendStatus(201)
   } else {
     res.sendStatus(401)
@@ -38,19 +33,28 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-
   const id = req.params.id
-  const newProduct = await mongo.reWrite(id, req.body)
-  res.sendStatus(204)
+  const admin = req.query.admin
+  if (admin === 'true') {
+    const newProduct = await mongo.reWrite(id, req.body)
+    res.sendStatus(204)
+  } else {
+    res.sendStatus(401)
+  }
 })
 
 router.delete('/:id', async (req, res, next) => {
   const id = req.params.id
-  try {
-    await mongo.deleteById(id)
-    res.sendStatus(204)
-  } catch (e) {
-    next(e)
+  const admin = req.query.admin
+  if (admin === 'true') {
+    try {
+      await mongo.deleteById(id)
+      res.sendStatus(204)
+    } catch (e) {
+      next(e)
+    }
+  } else {
+    res.sendStatus(401)
   }
 })
 
