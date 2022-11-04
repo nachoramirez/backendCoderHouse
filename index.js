@@ -26,7 +26,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use(useragent.express())
 
-app.use(`/api/products`, products)
+
+app.use('/api/products', products)
 app.use('/api/cart', cart)
 
 app.use((err, req, res, next) => {

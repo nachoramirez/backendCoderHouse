@@ -1,20 +1,23 @@
 const express = require('express')
 const { Router } = express
-const Container = require('../container')
+
+const MongoContainer = require('../daos/mongo/cartDaos')
 
 const router = Router(Router)
-
-const cart = new Container('/cart.txt')
+const mongo = new MongoContainer()
+mongo.connect()
 
 router.get('/', async (req, res) => {
-  const allcart = await cart.getAll()
+  const allcart = await mongo.getAll()
   res.send(allcart)
 })
 
 router.get('/:id/products', async (req, res, next) => {
-  const id = parseInt(req.params.id)
+
+  const id = req.params.id
   try {
-    const allcart = await cart.getById(id)
+    const allcart = await mongo.getById(id)
+
     res.send(allcart[0])
   } catch (e) {
     next(e)
@@ -22,23 +25,28 @@ router.get('/:id/products', async (req, res, next) => {
 })
 
 router.post('/', async (req, res) => {
-  const newCart = await cart.createCart()
+
+  const newCart = await mongo.createCart()
+
   console.log(newCart)
   res.send(newCart)
 })
 
 router.post('/:id/products', async (req, res) => {
-  const id = parseInt(req.params.id)
 
-  const newProduct = await cart.saveItem(req.body, id)
+  const id = req.params.id
+
+  const newProduct = await mongo.saveItem(req.body, id)
+
   res.sendStatus(204)
 })
 
 router.delete('/:id', async (req, res, next) => {
-  const id = parseInt(req.params.id)
+
+  const id = req.params.id
 
   try {
-    await cart.deleteById(id)
+    await mongo.deleteById(id)
     res.sendStatus(204)
   } catch (e) {
     next(e)
@@ -46,15 +54,19 @@ router.delete('/:id', async (req, res, next) => {
 })
 
 router.delete('/:id/products/:productId', async (req, res, next) => {
-  const id = parseInt(req.params.id)
-  const productId = parseInt(req.params.productId)
+
+  const id = req.params.id
+  const productId = req.params.productId
 
   try {
-    await cart.deleteProductOnCart(id, productId)
+    await mongo.deleteProductOnCart(id, productId)
+
     res.sendStatus(204)
   } catch (e) {
     next(e)
   }
 })
 
+
 module.exports = router
+
