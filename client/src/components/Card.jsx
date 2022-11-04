@@ -89,7 +89,7 @@ export const Card = ({ data, admin, modal }) => {
           src='https://cdn-icons-png.flaticon.com/512/240/240375.png'
         />
         <AdminButtons
-          onClick={() => modal(data.id, 'delete')}
+          onClick={() => modal(data._id, 'delete')}
           admin={admin ? 0 : 1}
           src='https://cdn-icons-png.flaticon.com/512/6861/6861362.png'
         />
