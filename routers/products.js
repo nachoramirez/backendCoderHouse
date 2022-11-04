@@ -27,7 +27,18 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  const admin = req.query.admin
+  if (admin === 'true') {
+    const newProduct = await products.save(req.body)
+    res.sendStatus(201)
+  } else {
+    res.sendStatus(401)
+  }
+})
+
 router.put('/:id', async (req, res) => {
+
   const id = req.params.id
   const newProduct = await mongo.reWrite(id, req.body)
   res.sendStatus(204)
