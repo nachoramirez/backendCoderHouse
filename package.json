@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run dev",
     "dev": "cross-env NODE_ENV=local ./node_modules/nodemon/bin/nodemon.js --exec 'node -r dotenv/config' ./index.js"
   },
   "keywords": [],
@@ -13,7 +13,8 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.18.1",
-    "express-useragent": "^1.0.15"
+    "express-useragent": "^1.0.15",
+    "mongoose": "^6.7.1"
   },
   "devDependencies": {
     "dotenv": "^16.0.2",
