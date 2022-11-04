@@ -9,8 +9,8 @@ export const useVerifyCart = () => {
       const response = await axios('http://localhost:8080/api/cart/', {
         method: 'post',
       })
-      response.data && setCartId(response.data.id)
-      response.data && localStorage.setItem('cartId', response.data.id)
+      response.data && setCartId(response.data)
+      response.data && localStorage.setItem('cartId', response.data)
     }
 
     cartId === null && fetchData()

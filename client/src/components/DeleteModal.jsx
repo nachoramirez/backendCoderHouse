@@ -79,6 +79,7 @@ export const DeleteModal = ({ onClose, data, action }) => {
 
   const handleDelete = async () => {
     if (action === 'cart') {
+      console.log(data)
       const response = await axios.delete(
         `http://localhost:8080/api/cart/${cart}/products/${data}`
       )

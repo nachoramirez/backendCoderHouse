@@ -36,7 +36,7 @@ export const CartItem = ({ data, modal }) => {
       <p>{data.description}</p>
       <h1>${data.price}</h1>
       <DeleteButton
-        onClick={() => modal(data.id)}
+        onClick={() => modal(data._id)}
         src='https://cdn-icons-png.flaticon.com/512/6861/6861362.png'
       />
     </CartItemContainer>

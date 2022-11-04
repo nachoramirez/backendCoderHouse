@@ -82,9 +82,9 @@ export const EditModal = ({ onClose, data }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (newData.id) {
+    if (newData._id) {
       const response = await axios(
-        `http://localhost:8080/api/products/${newData.id}?admin=true`,
+        `http://localhost:8080/api/products/${newData._id}?admin=true`,
         {
           method: 'put',
           data: newData,
