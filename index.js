@@ -5,6 +5,9 @@ const path = require('path')
 const products = require('./routers/products')
 const cart = require('./routers/cart')
 
+const productsFirebase = require('./routers-fb/products')
+const cartFirebase = require('./routers-fb/cart')
+
 const app = express()
 
 const PORT = process.env.NODE_PORT
@@ -26,9 +29,12 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use(useragent.express())
 
-
 app.use('/api/products', products)
 app.use('/api/cart', cart)
+
+app.use('/api/productsFB', productsFirebase)
+app.use('/api/cartFB', cartFirebase)
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

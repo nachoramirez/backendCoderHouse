@@ -1,6 +1,4 @@
-const fs = require('fs')
 const mongoose = require('mongoose')
-
 class MongoContainer {
   constructor(model) {
     this.Model = model
