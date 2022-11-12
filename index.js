@@ -3,11 +3,14 @@ const useragent = require('express-useragent')
 const path = require('path')
 const { Server: IOServer } = require('socket.io')
 const { Server: HttpServer } = require('http')
-
+const { schema, denormalize, normalize } = require('normalizr')
 const Container = require('./container')
+const FakeAPI = require('./faker/fakeAPI.js')
+const util = require('util')
 
 const products = new Container('/products.txt', 'products', 'MariaDB')
 const mensajes = new Container('/mensajes.txt', 'mensajes', 'SQlite3')
+const fakeProducts = new FakeAPI('xd', 'fakeProducts', 'SQlite3')
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -28,14 +31,30 @@ app.get('/', async (req, res) => {
   res.sendFile('index.html', { root: __dirname })
 })
 
+app.get('/api/products-test', async (req, res) => {
+  const response = await fakeProducts.getAll()
+  res.send(response)
+})
+
 io.on('connection', async (socket) => {
+  const user = new schema.Entity('user', {}, { idAttribute: 'email' })
+  const text = new schema.Entity('text')
+  const mesajes = new schema.Entity('mesajes', [{ user, mesajes: text }])
+  
+  
   console.log('usuario conectado')
 
   allProducts = await products.getAll()
   allMensajes = await mensajes.getAll()
+  allMensajes = {
+    ...allMensajes,
+    mesajes: allMensajes,
+  }
+  
+  const norm = normalize(allMensajes, mesajes)
 
   socket.emit('products', allProducts)
-  socket.emit('mensajes', allMensajes)
+  socket.emit('mensajes', norm)
 
   socket.on('new-product', async (data) => {
     allProducts.push(data)
@@ -44,12 +63,11 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('new-mensaje', async (data) => {
-    allMensajes.push(data)
+    allMensajes.mesajes.push(data)
     await mensajes.save(data)
     io.sockets.emit('mensajes', allMensajes)
   })
 })
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack)
@@ -62,3 +80,5 @@ const server = httpServer.listen(PORT, () => {
 })
 
 server.on('error', (error) => console.log(`Error en servidor ${error}`))
+
+

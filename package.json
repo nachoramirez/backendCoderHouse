@@ -17,10 +17,12 @@
     "express-useragent": "^1.0.15",
     "knex": "^2.3.0",
     "mysql": "^2.18.1",
+    "normalizr": "^3.6.2",
     "socket.io": "^4.5.2",
     "sqlite3": "^5.1.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "dotenv": "^16.0.2",
     "nodemon": "^2.0.20"
   }

@@ -9,6 +9,7 @@
     <script src="/static/index.js"></script>
     <link rel="stylesheet" href="/static/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.2/"></script>
   </head>
   <body>
     <section>
@@ -85,9 +86,13 @@
     <section class="mensaje-center">
       <h2>Centro de mensajes</h2>
       <form class="chat-box" id="form" onsubmit="event.preventDefault()">
-        <input placeholder="mail" id="mail" required />
-        <div class="chat-box-text" id="mensajes">
-        </div>
+        <input placeholder="mail" id="mail" type="mail" required />
+        <input placeholder="name" id="name" required />
+        <input placeholder="lastname" id="lastname" required />
+        <input placeholder="age" id="age" required />
+        <input placeholder="alias" id="alias" required />
+        <input placeholder="avatar" id="avatar" required />
+        <div class="chat-box-text" id="mensajes"></div>
         <div>
           <input placeholder="mensaje" id="text" required />
           <button type="button" onclick="onChatSubmit()">Enviar</button>

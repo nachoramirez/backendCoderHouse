@@ -15,6 +15,10 @@ const fillTemplate = (products) => {
   document.querySelector('#output').innerHTML = filled
 }
 
+const user = new schema.Entity('user', {}, { idAttribute: 'email' })
+const text = new schema.Entity('text')
+const mesajes = new schema.Entity('mesajes', [{ user, mesajes: text }])
+
 function onSubmit() {
   const title = document.getElementById('product').value
   const price = document.getElementById('price').value
@@ -32,24 +36,25 @@ function onSubmit() {
 
 function onChatSubmit() {
   const mail = document.getElementById('mail').value
+  const name = document.getElementById('name').value
+  const lastname = document.getElementById('lastname').value
+  const age = document.getElementById('age').value
+  const alias = document.getElementById('alias').value
+  const avatar = document.getElementById('avatar').value
   const text = document.getElementById('text').value
-  const date = new Date()
-  const datestring =
-    ('0' + date.getDate()).slice(-2) +
-    '/' +
-    ('0' + (date.getMonth() + 1)).slice(-2) +
-    '/' +
-    date.getFullYear() +
-    ' ' +
-    ('0' + date.getHours()).slice(-2) +
-    ':' +
-    ('0' + date.getMinutes()).slice(-2)
 
   const mensaje = {
-    mail: mail,
+    user: {
+      mail: mail,
+      name: name,
+      lastname: lastname,
+      age: age,
+      alias: alias,
+      avatar: avatar,
+    },
     mensaje: text,
-    date: datestring,
   }
+
   socket.emit('new-mensaje', mensaje)
   document.getElementById('text').value = ''
 }
@@ -60,6 +65,8 @@ socket.on('products', (data) => {
 
 socket.on('mensajes', (data) => {
   const element = document.getElementById('mensajes')
+
+  normalizr.denormalize(data.result,mesajes, data.entities)
 
   element.innerHTML = data
     .map(
