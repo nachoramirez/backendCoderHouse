@@ -67,6 +67,7 @@ export const Card = ({ data, admin, modal }) => {
   const cartId = useVerifyCart()
 
   const addProductToCart = async () => {
+    console.log(data,cartId)
     const response = await axios(
       `http://localhost:8080/api/cart/${cartId}/products`,
       {
@@ -74,7 +75,6 @@ export const Card = ({ data, admin, modal }) => {
         data: data,
       }
     )
-    console.log(response)
   }
 
   return (

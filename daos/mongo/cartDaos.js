@@ -10,7 +10,6 @@ class cartMongo extends mongoContainer {
     try {
       const productsSaveModel = new this.Model({})
       const newCart = await productsSaveModel.save()
-      console.log(newCart)
       return newCart._id
     } catch (e) {
       console.log(e)

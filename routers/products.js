@@ -8,6 +8,7 @@ const mongo = new productsMongo()
 mongo.connect()
 
 router.get('/', async (req, res) => {
+  console.log(req.session.admin)
   const allProducts = await mongo.getAll()
   res.send(allProducts)
 })
@@ -23,7 +24,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.post('/', async (req, res) => {
-  const admin = req.query.admin
+  const admin = req.session.admin
   if (admin === 'true') {
     const newProduct = await mongo.save(req.body)
     res.sendStatus(201)
@@ -34,8 +35,9 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const id = req.params.id
-  const admin = req.query.admin
-  if (admin === 'true') {
+  const admin = req.session.admin
+  console.log(admin)
+  if (admin) {
     const newProduct = await mongo.reWrite(id, req.body)
     res.sendStatus(204)
   } else {
@@ -45,7 +47,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res, next) => {
   const id = req.params.id
-  const admin = req.query.admin
+  const admin = req.session.admin
   if (admin === 'true') {
     try {
       await mongo.deleteById(id)

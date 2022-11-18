@@ -1,11 +1,11 @@
 import './App.css'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { ProductsContainer } from './components/ProductsContainer'
 import { EditModal } from './components/EditModal'
 import { DeleteModal } from './components/DeleteModal'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useVerifyCart } from './hooks/useVerifyCart'
 
 const CartIcon = styled.button`
   background-image: url('https://cdn-icons-png.flaticon.com/512/2838/2838838.png');
@@ -24,7 +24,8 @@ const CartIcon = styled.button`
 
 const App = () => {
   const navigate = useNavigate()
-  const [admin, setAdmin] = useState(false)
+  const [user, setLogin] = useState(localStorage.getItem('user'))
+  const [admin, setAdmin] = useState(localStorage.getItem('admin'))
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [editData, setEditData] = useState()
@@ -37,6 +38,17 @@ const App = () => {
       setOpenEditModal(true)
     } else {
       setOpenEditModal(true)
+    }
+  }
+
+  const handleLogout = async () => {
+    const response = await axios(`http://localhost:8080/api/login`, {
+      method: 'DELETE',
+    })
+    if (response.status === 200) {
+      localStorage.removeItem('user')
+      localStorage.removeItem('admin')
+      navigate(0)
     }
   }
 
@@ -53,14 +65,20 @@ const App = () => {
         />
       )}
       <div className='App'>
-        <button onClick={() => setAdmin((prev) => !prev)}>
-          {admin ? 'logout' : 'login'}
-        </button>
-        {admin && (
-          <button onClick={() => handleModal(null, 'add')}>add product</button>
+        {admin ? (
+          <>
+            <h3 style={{ color: 'white' }}>hola {user}</h3>
+            <button onClick={() => handleLogout()}>Logout</button>
+            <button onClick={() => handleModal(null, 'add')}>
+              add product
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => navigate('/login')}>login</button>
+          </>
         )}
         <CartIcon onClick={() => navigate('/cart')}></CartIcon>
-
         <ProductsContainer modal={handleModal} admin={admin} />
       </div>
     </>

@@ -7,8 +7,9 @@ class MongoContainer {
 
   async connect() {
     try {
-      const URL = 'mongodb://127.0.0.1:27017/mibase'
-      const response = await mongoose.connect(URL)
+      const URL =
+        'mongodb+srv://nachoramirez:gQ5pjowypR2sDvMG@cluster0.a2zbvhk.mongodb.net/?retryWrites=true&w=majority'
+      mongoose.connect(URL)
       console.log('connected')
     } catch (e) {
       console.log(e)
@@ -18,7 +19,6 @@ class MongoContainer {
   async getAll() {
     try {
       const products = await this.Model.find({})
-      console.log(products)
       return products
     } catch (e) {
       console.error('error', e)
